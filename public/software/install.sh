@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-INSTALLER_VERSION="1.0.0"
+INSTALLER_VERSION="1.1.0"
 SITE_URL="${ITHECOVER_SITE_URL:-https://ithecover.com}"
 THECOVER_URL="${THECOVER_URL:-${SITE_URL}/software/thecover}"
 THECOVER_SHA256="${THECOVER_SHA256:-26bd542a496e145692369a1c0ef207ff38dc88cb7da5d0ae3c3d67e5c50cf74b}"
@@ -11,9 +11,9 @@ TEMP_DIR=""
 COLOR_RESET=""
 COLOR_BOLD=""
 COLOR_DIM=""
-COLOR_BLUE=""
 COLOR_CYAN=""
 COLOR_GREEN=""
+COLOR_MAGENTA=""
 COLOR_YELLOW=""
 COLOR_RED=""
 
@@ -30,28 +30,20 @@ init_colors() {
         COLOR_RESET=$'\033[0m'
         COLOR_BOLD=$'\033[1m'
         COLOR_DIM=$'\033[2m'
-        COLOR_BLUE=$'\033[34m'
-        COLOR_CYAN=$'\033[36m'
-        COLOR_GREEN=$'\033[32m'
-        COLOR_YELLOW=$'\033[33m'
-        COLOR_RED=$'\033[31m'
+        COLOR_CYAN=$'\033[96m'
+        COLOR_GREEN=$'\033[92m'
+        COLOR_MAGENTA=$'\033[95m'
+        COLOR_YELLOW=$'\033[93m'
+        COLOR_RED=$'\033[91m'
     fi
 }
 
-info() {
-    printf '%s[信息]%s %s\n' "$COLOR_BLUE" "$COLOR_RESET" "$*"
-}
-
-success() {
-    printf '%s[完成]%s %s\n' "$COLOR_GREEN" "$COLOR_RESET" "$*"
-}
-
 warn() {
-    printf '%s[提示]%s %s\n' "$COLOR_YELLOW" "$COLOR_RESET" "$*" >&2
+    printf '%s[!]%s %s\n' "$COLOR_YELLOW" "$COLOR_RESET" "$*" >&2
 }
 
 fail() {
-    printf '%s[错误]%s %s\n' "$COLOR_RED" "$COLOR_RESET" "$*" >&2
+    printf '%s[×]%s %s\n' "$COLOR_RED" "$COLOR_RESET" "$*" >&2
     exit 1
 }
 
@@ -78,21 +70,90 @@ EOF
 
 print_header() {
     printf '\n'
-    printf '%s%s╭──────────────────────────────────────────╮%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
-    printf '%s%s│       iTHECOVER Software Center          │%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
-    printf '%s%s│          终端软件安装中心                │%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
-    printf '%s%s╰──────────────────────────────────────────╯%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
-    printf '%s版本 %s · 安装源 %s%s\n\n' "$COLOR_DIM" "$INSTALLER_VERSION" "$SITE_URL" "$COLOR_RESET"
+    printf '%s%s┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s%s┃           █ ▀█▀ █ █ █▀▀ █▀▀ █▀█ █ █ █▀▀ █▀█            ┃%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s%s┃           █  █  █▀█ █▀▀ █   █ █ ▀▄▀ █▀▀ █▀▄            ┃%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s%s┃           █  █  █ █ █▄▄ █▄▄ █▄█  █  █▄▄ █ █            ┃%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s%s┃              TERMINAL SOFTWARE CENTER v%s           ┃%s\n' \
+        "$COLOR_BOLD" "$COLOR_CYAN" "$INSTALLER_VERSION" "$COLOR_RESET"
+    printf '%s%s┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛%s\n' "$COLOR_BOLD" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%sSOURCE %s · SECURE INSTALL CHANNEL%s\n\n' "$COLOR_DIM" "$SITE_URL" "$COLOR_RESET"
 }
 
 print_software_list() {
-    printf '  %s%s1)%s THE COVER%s\n' "$COLOR_BOLD" "$COLOR_GREEN" "$COLOR_RESET" \
-        '     Linux x86_64 命令行工具'
-    printf '  %s%s2)%s MoyuKit%s\n' "$COLOR_BOLD" "$COLOR_GREEN" "$COLOR_RESET" \
-        '       Shell / R 工作流工具箱'
-    printf '  %s%s3)%s 安装全部%s\n' "$COLOR_BOLD" "$COLOR_GREEN" "$COLOR_RESET" \
-        '      依次安装以上软件'
-    printf '  %s0)%s 退出\n\n' "$COLOR_DIM" "$COLOR_RESET"
+    printf '%s┏━ SOFTWARE SELECT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓%s\n' "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s                                                        %s┃%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s  %s[1]%s %sTHE COVER%s      %sLINUX x86_64%s                       %s┃%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_GREEN" "$COLOR_RESET" \
+        "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_DIM" "$COLOR_RESET" \
+        "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s      高性能磁盘空间分析工具                            %s┃%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s                                                        %s┃%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s  %s[2]%s %sMOYUKIT%s        %sBASH / R TOOLKIT%s                   %s┃%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_GREEN" "$COLOR_RESET" \
+        "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_DIM" "$COLOR_RESET" \
+        "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s      Linux 服务器工作流工具箱                          %s┃%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s                                                        %s┃%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s  %s[3]%s %sINSTALL ALL%s                                       %s┃%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_MAGENTA" "$COLOR_RESET" \
+        "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┃%s  %s[0] EXIT%s                                              %s┃%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_DIM" "$COLOR_RESET" \
+        "$COLOR_CYAN" "$COLOR_RESET"
+    printf '%s┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛%s\n\n' "$COLOR_CYAN" "$COLOR_RESET"
+}
+
+pixel_panel_open() {
+    local title="$1"
+
+    printf '\n%s┌─ %s%s%s ─────────────────────────────────────────────%s\n' \
+        "$COLOR_CYAN" "$COLOR_BOLD" "$title" "$COLOR_CYAN" "$COLOR_RESET"
+}
+
+pixel_progress() {
+    local bar="$1"
+    local label="$2"
+
+    printf '%s│%s %s[%s]%s %s%s%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_MAGENTA" "$bar" "$COLOR_RESET" \
+        "$COLOR_BOLD" "$label" "$COLOR_RESET"
+}
+
+pixel_step_done() {
+    local label="$1"
+    local detail="${2:-}"
+
+    printf '%s│%s %s[✓]%s %-18s %s%s%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_GREEN" "$COLOR_RESET" \
+        "$label" "$COLOR_DIM" "$detail" "$COLOR_RESET"
+}
+
+pixel_step_note() {
+    local label="$1"
+    local detail="${2:-}"
+
+    printf '%s│%s %s[!]%s %-18s %s%s%s\n' \
+        "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_YELLOW" "$COLOR_RESET" \
+        "$label" "$COLOR_DIM" "$detail" "$COLOR_RESET"
+}
+
+pixel_panel_ready() {
+    printf '%s└─ %sSTATUS: READY%s ───────────────────────────────────────%s\n' \
+        "$COLOR_CYAN" "$COLOR_GREEN" "$COLOR_CYAN" "$COLOR_RESET"
+}
+
+pixel_child_output() {
+    local output="$1"
+    local line
+
+    [[ -n "$output" ]] || return 0
+    while IFS= read -r line; do
+        printf '%s│%s %s%s%s\n' \
+            "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_DIM" "$line" "$COLOR_RESET"
+    done <<< "$output"
 }
 
 ensure_temp_dir() {
@@ -182,11 +243,11 @@ ensure_local_bin_on_path() {
     if [[ -f "$bashrc" ]]; then
         backup="${bashrc}.ithecover.bak.$(date +%Y%m%d%H%M%S)"
         cp -- "$bashrc" "$backup"
-        info "已备份 .bashrc：$backup"
+        pixel_step_done "BASHRC BACKUP" "$backup"
     fi
 
     mv -- "$new_bashrc" "$bashrc"
-    warn "PATH 已写入 ~/.bashrc；安装完成后执行 source ~/.bashrc。"
+    pixel_step_note "RELOAD SHELL" "source ~/.bashrc"
 }
 
 install_thecover() {
@@ -195,14 +256,22 @@ install_thecover() {
     local install_path="${install_dir}/thecover"
 
     [[ -n "${HOME:-}" ]] || fail "未检测到 HOME 目录。"
+    pixel_panel_open "THE COVER"
+    pixel_progress "▓░░░░░░░" "PLATFORM CHECK"
     ensure_supported_thecover_platform
+    pixel_step_done "PLATFORM" "LINUX x86_64"
     ensure_temp_dir
     binary="$TEMP_DIR/thecover"
 
-    info "正在下载 THE COVER…"
+    pixel_progress "▓▓▓░░░░░" "DOWNLOADING PACKAGE"
     download_file "$THECOVER_URL" "$binary"
-    verify_sha256 "$THECOVER_SHA256" "$binary"
+    pixel_step_done "DOWNLOAD" "COMPLETE"
 
+    pixel_progress "▓▓▓▓▓░░░" "VERIFYING CHECKSUM"
+    verify_sha256 "$THECOVER_SHA256" "$binary"
+    pixel_step_done "SHA-256" "VERIFIED"
+
+    pixel_progress "▓▓▓▓▓▓▓░" "INSTALLING BINARY"
     mkdir -p -- "$install_dir"
     if command -v install >/dev/null 2>&1; then
         install -m 0755 "$binary" "$install_path"
@@ -212,24 +281,43 @@ install_thecover() {
     fi
 
     ensure_local_bin_on_path
-    success "THE COVER 已安装：$install_path"
+    pixel_step_done "INSTALL" "$install_path"
+    pixel_progress "▓▓▓▓▓▓▓▓" "INSTALL COMPLETE"
+    pixel_panel_ready
 }
 
 install_moyukit() {
     local installer
+    local installer_output
 
     [[ -n "${HOME:-}" ]] || fail "未检测到 HOME 目录。"
     command -v curl >/dev/null 2>&1 ||
         fail "MoyuKit 安装器需要 curl，请先安装 curl。"
 
+    pixel_panel_open "MOYUKIT"
     ensure_temp_dir
     installer="$TEMP_DIR/moyukit-install.sh"
 
-    info "正在获取 MoyuKit 安装器…"
+    pixel_progress "▓▓░░░░░░" "DOWNLOADING INSTALLER"
     download_file "$MOYUKIT_INSTALLER_URL" "$installer"
+    pixel_step_done "DOWNLOAD" "COMPLETE"
+
+    pixel_progress "▓▓▓▓░░░░" "VALIDATING INSTALLER"
     bash -n "$installer" || fail "MoyuKit 安装器语法校验失败。"
-    MOYUKIT_SERVER_URL="${SITE_URL}/software/moyukit" bash "$installer"
-    success "MoyuKit 安装完成。"
+    pixel_step_done "INSTALLER" "VALID"
+
+    pixel_progress "▓▓▓▓▓▓░░" "INSTALLING PACKAGE"
+    if ! installer_output="$(
+        MOYUKIT_SERVER_URL="${SITE_URL}/software/moyukit" \
+            bash "$installer" 2>&1
+    )"; then
+        pixel_child_output "$installer_output"
+        fail "MoyuKit 安装失败。"
+    fi
+    pixel_child_output "$installer_output"
+    pixel_step_done "PACKAGE" "INSTALLED"
+    pixel_progress "▓▓▓▓▓▓▓▓" "INSTALL COMPLETE"
+    pixel_panel_ready
 }
 
 install_named() {
@@ -266,7 +354,7 @@ read_from_terminal() {
 }
 
 pause_menu() {
-    read_from_terminal $'\n按 Enter 返回菜单…' >/dev/null
+    read_from_terminal "${COLOR_DIM}PRESS ENTER TO RETURN > ${COLOR_RESET}" >/dev/null
 }
 
 interactive_menu() {
@@ -275,7 +363,7 @@ interactive_menu() {
     while true; do
         print_header
         print_software_list
-        choice="$(read_from_terminal "${COLOR_BOLD}请选择 [0-3]：${COLOR_RESET}")"
+        choice="$(read_from_terminal "${COLOR_MAGENTA}${COLOR_BOLD}SELECT MODULE > ${COLOR_RESET}")"
 
         case "$choice" in
             1|2|3)
@@ -284,7 +372,7 @@ interactive_menu() {
                 pause_menu
                 ;;
             0|q|Q|quit|exit)
-                printf '\n再见！\n'
+                printf '\n%sSYSTEM HALTED. BYE.%s\n' "$COLOR_DIM" "$COLOR_RESET"
                 return 0
                 ;;
             *)
