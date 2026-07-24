@@ -111,6 +111,11 @@ const nextConfig = {
             destination: '/rss/feed.xml',
             permanent: true
           },
+          {
+            source: '/software/install',
+            destination: '/software/install.sh',
+            permanent: false
+          },
           ...Object.entries(SOFTWARE_DOWNLOADS).map(
             ([software, destination]) => ({
               source: `/software/${software}`,
