@@ -4,6 +4,14 @@ const path = require('path')
 const BLOG = require('./blog.config')
 const { extractLangPrefix } = require('./lib/utils/pageId')
 
+// Stable, human-friendly download URLs for software published on the site.
+// Add one entry here when a new package is added to the Notion Software page.
+const SOFTWARE_DOWNLOADS = {
+  thecover:
+    'https://raw.githubusercontent.com/Thecover/thecover/main/thecover',
+  moyukit: '/software/moyukit/latest.tar.gz'
+}
+
 // 打包时是否分析代码
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: BLOG.BUNDLE_ANALYZER
@@ -102,7 +110,14 @@ const nextConfig = {
             source: '/feed',
             destination: '/rss/feed.xml',
             permanent: true
-          }
+          },
+          ...Object.entries(SOFTWARE_DOWNLOADS).map(
+            ([software, destination]) => ({
+              source: `/software/${software}`,
+              destination,
+              permanent: false
+            })
+          )
         ]
       },
   // 重写url
