@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-INSTALLER_VERSION="1.2.0"
+INSTALLER_VERSION="1.2.1"
 SITE_URL="${ITHECOVER_SITE_URL:-https://ithecover.com}"
 THECOVER_URL="${THECOVER_URL:-${SITE_URL}/software/thecover}"
 THECOVER_SHA256="${THECOVER_SHA256:-26bd542a496e145692369a1c0ef207ff38dc88cb7da5d0ae3c3d67e5c50cf74b}"
@@ -39,13 +39,11 @@ init_colors() {
     fi
 }
 
-detect_language() {
-    local locale="${ITHECOVER_LANG:-${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}}"
-
-    case "${locale,,}" in
-        zh|zh-*|zh_*) LANGUAGE="zh" ;;
-        *) LANGUAGE="en" ;;
-    esac
+init_language() {
+    LANGUAGE="zh"
+    if [[ -n "${ITHECOVER_LANG:-}" ]]; then
+        set_language "$ITHECOVER_LANG" || LANGUAGE="zh"
+    fi
 }
 
 set_language() {
@@ -90,6 +88,8 @@ text() {
         en:bashrc_backup) printf 'BASHRC BACKUP' ;;
         zh:shell_config) printf 'SHELL 配置' ;;
         en:shell_config) printf 'SHELL CONFIG' ;;
+        zh:reload_shell) printf '重新加载 SHELL' ;;
+        en:reload_shell) printf 'RELOAD SHELL' ;;
         zh:updated) printf '已更新' ;;
         en:updated) printf 'UPDATED' ;;
         zh:install) printf '安装位置' ;;
@@ -182,9 +182,9 @@ usage() {
     if [[ "$LANGUAGE" == "zh" ]]; then
         cat <<'EOF'
 用法：
-  wget -qO- https://ithecover.com/software/install | bash && source ~/.bashrc
-  wget -qO- https://ithecover.com/software/install | bash -s -- --lang zh && source ~/.bashrc
-  bash install.sh --install moyukit && source ~/.bashrc
+  wget -qO- https://ithecover.com/software/install | bash
+  wget -qO- https://ithecover.com/software/install | bash -s -- --lang zh
+  bash install.sh --install moyukit
 
 选项：
   --list              列出可安装的软件
@@ -196,15 +196,15 @@ usage() {
 
 环境变量：
   ITHECOVER_SITE_URL  软件源地址，默认 https://ithecover.com
-  ITHECOVER_LANG      界面语言；未设置时自动检测系统语言
+  ITHECOVER_LANG      界面语言；默认 zh，可设置为 en
   NO_COLOR=1          禁用终端颜色
 EOF
     else
         cat <<'EOF'
 Usage:
-  wget -qO- https://ithecover.com/software/install | bash && source ~/.bashrc
-  wget -qO- https://ithecover.com/software/install | bash -s -- --lang en && source ~/.bashrc
-  bash install.sh --install moyukit && source ~/.bashrc
+  wget -qO- https://ithecover.com/software/install | bash
+  wget -qO- https://ithecover.com/software/install | bash -s -- --lang en
+  bash install.sh --install moyukit
 
 Options:
   --list              List available software
@@ -216,7 +216,7 @@ Options:
 
 Environment:
   ITHECOVER_SITE_URL  Software source; default: https://ithecover.com
-  ITHECOVER_LANG      Interface language; auto-detected when unset
+  ITHECOVER_LANG      Interface language; default: zh, optional: en
   NO_COLOR=1          Disable terminal colors
 EOF
     fi
@@ -437,6 +437,7 @@ ensure_local_bin_on_path() {
 
     mv -- "$new_bashrc" "$bashrc"
     pixel_step_done "$(text shell_config)" "~/.bashrc $(text updated)"
+    pixel_step_note "$(text reload_shell)" "source ~/.bashrc"
 }
 
 install_thecover() {
@@ -509,6 +510,7 @@ install_moyukit() {
     fi
     pixel_step_done "$(text package)" "$(text installed)"
     pixel_step_done "$(text shell_config)" "~/.bashrc $(text updated)"
+    pixel_step_note "$(text reload_shell)" "source ~/.bashrc"
     pixel_progress "▓▓▓▓▓▓▓▓" "$(text install_complete)"
     pixel_panel_ready
 }
@@ -584,7 +586,7 @@ main() {
     local -a arguments=("$@")
     local index
 
-    detect_language
+    init_language
 
     for ((index = 0; index < ${#arguments[@]}; index++)); do
         case "${arguments[index]}" in
