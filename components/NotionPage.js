@@ -223,9 +223,14 @@ const Pdf = dynamic(() => import('@/components/Pdf').then(m => m.Pdf), {
 })
 
 // 美化代码 from: https://github.com/txs
-const PrismMac = dynamic(() => import('@/components/PrismMac'), {
-  ssr: false
-})
+const PrismMac = dynamic(
+  () =>
+    import('@/components/PrismMac').catch(error => {
+      console.warn('PrismMac failed to load; using basic code blocks', error)
+      return () => null
+    }),
+  { ssr: false }
+)
 
 /**
  * tweet嵌入
