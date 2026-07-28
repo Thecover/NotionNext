@@ -4,11 +4,9 @@ const path = require('path')
 const BLOG = require('./blog.config')
 const { extractLangPrefix } = require('./lib/utils/pageId')
 
-// Stable, human-friendly download URLs for software published on the site.
-// Add one entry here when a new package is added to the Notion Software page.
+// Stable, human-friendly redirects for versioned packages published on the site.
+// THE COVER is served directly from public/software/thecover.
 const SOFTWARE_DOWNLOADS = {
-  thecover:
-    'https://raw.githubusercontent.com/Thecover/thecover/main/thecover',
   moyukit: '/software/moyukit/latest.tar.gz'
 }
 
