@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-INSTALLER_VERSION="1.2.1"
+INSTALLER_VERSION="1.3.0"
 SITE_URL="${ITHECOVER_SITE_URL:-https://ithecover.com}"
 THECOVER_URL="${THECOVER_URL:-${SITE_URL}/software/thecover}"
 THECOVER_SHA256="${THECOVER_SHA256:-26bd542a496e145692369a1c0ef207ff38dc88cb7da5d0ae3c3d67e5c50cf74b}"
@@ -122,8 +122,8 @@ text() {
         en:select_prompt) printf 'SELECT MODULE > ' ;;
         zh:halted) printf '系统已退出，再见。' ;;
         en:halted) printf 'SYSTEM HALTED. BYE.' ;;
-        zh:invalid_choice) printf '请输入 0、1、2、3 或 L。' ;;
-        en:invalid_choice) printf 'Enter 0, 1, 2, 3, or L.' ;;
+        zh:invalid_choice) printf '请输入 0、1、2、3、H 或 L。' ;;
+        en:invalid_choice) printf 'Enter 0, 1, 2, 3, H, or L.' ;;
         zh:missing_download_tool) printf '缺少下载工具，请先安装 curl 或 wget。' ;;
         en:missing_download_tool) printf 'No download tool found. Install curl or wget first.' ;;
         zh:missing_sha256) printf '缺少 sha256sum，无法校验下载文件。' ;;
@@ -189,6 +189,7 @@ usage() {
 选项：
   --list              列出可安装的软件
   --install NAME      直接安装指定软件：thecover、moyukit 或 all
+  --usage NAME        查看软件使用说明（目前支持 moyukit）
   --lang LANG         指定界面语言：zh 或 en
   --no-color          禁用终端颜色
   -h, --help          显示帮助
@@ -209,6 +210,7 @@ Usage:
 Options:
   --list              List available software
   --install NAME      Install thecover, moyukit, or all
+  --usage NAME        Show software usage (currently moyukit)
   --lang LANG         Set the interface language: zh or en
   --no-color          Disable terminal colors
   -h, --help          Show help
@@ -257,6 +259,9 @@ print_software_list() {
         printf '%s┃%s  %s[3]%s %s安装全部%s                                          %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_MAGENTA" "$COLOR_RESET" \
             "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s┃%s  %s[H] MOYUKIT 使用说明%s                                  %s┃%s\n' \
+            "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_YELLOW" "$COLOR_RESET" \
+            "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s┃%s  %s[L] SWITCH TO ENGLISH%s                                 %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_YELLOW" "$COLOR_RESET" \
             "$COLOR_CYAN" "$COLOR_RESET"
@@ -284,6 +289,9 @@ print_software_list() {
         printf '%s┃%s  %s[3]%s %sINSTALL ALL%s                                       %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_MAGENTA" "$COLOR_RESET" \
             "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s┃%s  %s[H] MOYUKIT USAGE%s                                     %s┃%s\n' \
+            "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_YELLOW" "$COLOR_RESET" \
+            "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s┃%s  %s[L] 切换到中文%s                                        %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_YELLOW" "$COLOR_RESET" \
             "$COLOR_CYAN" "$COLOR_RESET"
@@ -292,6 +300,44 @@ print_software_list() {
             "$COLOR_CYAN" "$COLOR_RESET"
     fi
     printf '%s┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛%s\n\n' "$COLOR_CYAN" "$COLOR_RESET"
+}
+
+print_moyukit_usage() {
+    printf '\n'
+    if [[ "$LANGUAGE" == "zh" ]]; then
+        pixel_panel_open "MOYUKIT · 使用说明"
+        pixel_step_note "首次加载" "source ~/.bashrc"
+        printf '%s│%s %s表格查看%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   tless file.tsv        对齐并分页查看表格\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   tless file.vcf.gz     查看压缩的 VCF 文件\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   command | tless       查看管道输入\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   tless -H -n 50 file   显示元信息及前 50 行\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %s创建文件%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   nf notes.txt          覆盖创建，输入 EOF 结束\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   nf -a notes.txt       追加内容\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %s运行 R 脚本%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   rr                    运行 1.r\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   rr analysis.R         运行指定 R 脚本\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %s管理%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   moyu help | version | update\n' "$COLOR_CYAN" "$COLOR_RESET"
+    else
+        pixel_panel_open "MOYUKIT · USAGE"
+        pixel_step_note "FIRST LOAD" "source ~/.bashrc"
+        printf '%s│%s %sTABLE VIEWER%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   tless file.tsv        Align and page through a table\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   tless file.vcf.gz     View a compressed VCF file\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   command | tless       View piped input\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   tless -H -n 50 file   Show metadata and first 50 rows\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %sCREATE FILES%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   nf notes.txt          Overwrite; enter EOF to finish\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   nf -a notes.txt       Append content\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %sRUN R SCRIPTS%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   rr                    Run 1.r\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   rr analysis.R         Run the selected R script\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %sMANAGE%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   moyu help | version | update\n' "$COLOR_CYAN" "$COLOR_RESET"
+    fi
+    pixel_panel_ready
 }
 
 pixel_panel_open() {
@@ -569,6 +615,10 @@ interactive_menu() {
             l|L)
                 toggle_language
                 ;;
+            h|H|help|usage)
+                print_moyukit_usage
+                pause_menu
+                ;;
             0|q|Q|quit|exit)
                 printf '\n%s%s%s\n' "$COLOR_DIM" "$(text halted)" "$COLOR_RESET"
                 return 0
@@ -583,6 +633,7 @@ interactive_menu() {
 main() {
     local action="menu"
     local install_target=""
+    local usage_target=""
     local -a arguments=("$@")
     local index
 
@@ -620,6 +671,13 @@ main() {
                 install_target="$2"
                 shift 2
                 ;;
+            --usage)
+                [[ $# -ge 2 ]] ||
+                    fail "$(format_text install_needs_value --usage)"
+                action="usage"
+                usage_target="$2"
+                shift 2
+                ;;
             --lang)
                 [[ $# -ge 2 ]] ||
                     fail "$(format_text lang_needs_value --lang)"
@@ -650,6 +708,17 @@ main() {
         install)
             print_header
             install_named "$install_target"
+            ;;
+        usage)
+            print_header
+            case "${usage_target,,}" in
+                moyukit|moyu-kit)
+                    print_moyukit_usage
+                    ;;
+                *)
+                    fail "$(format_text unknown_software "$usage_target")"
+                    ;;
+            esac
             ;;
         menu)
             interactive_menu
