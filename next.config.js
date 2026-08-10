@@ -206,7 +206,10 @@ const nextConfig = {
     return config
   },
   experimental: {
-    scrollRestoration: true
+    scrollRestoration: true,
+    // Keep static generation in one worker so repeated Notion reads can share
+    // the in-memory cache instead of triggering API rate limits in parallel.
+    cpus: 1
   },
   exportPathMap: async function (
     defaultPathMap,
