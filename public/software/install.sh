@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-INSTALLER_VERSION="1.3.0"
+INSTALLER_VERSION="1.4.0"
 SITE_URL="${ITHECOVER_SITE_URL:-https://ithecover.com}"
 THECOVER_URL="${THECOVER_URL:-${SITE_URL}/software/thecover}"
 THECOVER_SHA256="${THECOVER_SHA256:-26bd542a496e145692369a1c0ef207ff38dc88cb7da5d0ae3c3d67e5c50cf74b}"
@@ -249,7 +249,7 @@ print_software_list() {
         printf '%s┃%s      高性能磁盘空间分析工具                            %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s┃%s                                                        %s┃%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
-        printf '%s┃%s  %s[2]%s %sMOYUKIT%s        %sBASH / R TOOLKIT%s                   %s┃%s\n' \
+        printf '%s┃%s  %s[2]%s %sMOYUKIT%s        %sBASH / R / SLURM%s                   %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_GREEN" "$COLOR_RESET" \
             "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_DIM" "$COLOR_RESET" \
             "$COLOR_CYAN" "$COLOR_RESET"
@@ -279,7 +279,7 @@ print_software_list() {
         printf '%s┃%s      High-performance disk usage analyzer              %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s┃%s                                                        %s┃%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_CYAN" "$COLOR_RESET"
-        printf '%s┃%s  %s[2]%s %sMOYUKIT%s        %sBASH / R TOOLKIT%s                   %s┃%s\n' \
+        printf '%s┃%s  %s[2]%s %sMOYUKIT%s        %sBASH / R / SLURM%s                   %s┃%s\n' \
             "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_GREEN" "$COLOR_RESET" \
             "$COLOR_BOLD" "$COLOR_RESET" "$COLOR_DIM" "$COLOR_RESET" \
             "$COLOR_CYAN" "$COLOR_RESET"
@@ -318,8 +318,15 @@ print_moyukit_usage() {
         printf '%s│%s %s运行 R 脚本%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   rr                    运行 1.r\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s   rr analysis.R         运行指定 R 脚本\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %s目录与数据工具%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   mkcd analysis/result  创建目录并进入\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   fgt data.tsv          生成数据说明提示词\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %sSlurm 工具%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   nq node03             查看节点待运行作业\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   jres 24455            查看作业资源使用\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s %s管理%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   moyu help | version | update\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   moyu channel status   查看稳定/开发通道\n' "$COLOR_CYAN" "$COLOR_RESET"
     else
         pixel_panel_open "MOYUKIT · USAGE"
         pixel_step_note "FIRST LOAD" "source ~/.bashrc"
@@ -334,8 +341,15 @@ print_moyukit_usage() {
         printf '%s│%s %sRUN R SCRIPTS%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   rr                    Run 1.r\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s   rr analysis.R         Run the selected R script\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %sDIRECTORY & DATA%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   mkcd analysis/result  Create and enter a directory\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   fgt data.tsv          Generate a data prompt\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s %sSLURM TOOLS%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
+        printf '%s│%s   nq node03             View pending jobs by node\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   jres 24455            Show job resource usage\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s %sMANAGE%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   moyu help | version | update\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   moyu channel status   Show stable/dev channel\n' "$COLOR_CYAN" "$COLOR_RESET"
     fi
     pixel_panel_ready
 }
