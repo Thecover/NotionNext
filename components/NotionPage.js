@@ -1,5 +1,5 @@
 import { siteConfig } from '@/lib/config'
-import { compressImage, mapImgUrl } from '@/lib/notion/mapImage'
+import { compressImage, mapImgUrlWithRecordMap } from '@/lib/notion/mapImage'
 import { isBrowser } from '@/lib/utils'
 import mediumZoom from '@fisch0920/medium-zoom'
 import 'katex/dist/katex.min.css'
@@ -87,11 +87,14 @@ const NotionPage = ({ post, className }) => {
   return (
     <div
       id='notion-article'
-      className={`mx-auto overflow-hidden ${className || ''}`}>
+      className={`mx-auto overflow-hidden ${className || ''}`}
+    >
       <NotionRenderer
         recordMap={post?.blockMap}
         mapPageUrl={mapPageUrl}
-        mapImageUrl={mapImgUrl}
+        mapImageUrl={(img, block) =>
+          mapImgUrlWithRecordMap(img, block, post?.blockMap)
+        }
         components={{
           Code,
           Collection,
