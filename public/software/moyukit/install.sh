@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-BOOTSTRAP_VERSION="0.2.0"
+BOOTSTRAP_VERSION="0.2.1"
 MOYUKIT_SERVER_URL="${MOYUKIT_SERVER_URL:-https://ithecover.com/software/moyukit}"
 MOYUKIT_BOOTSTRAP_TMP=""
 

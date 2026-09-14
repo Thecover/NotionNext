@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-INSTALLER_VERSION="1.4.0"
+INSTALLER_VERSION="1.4.1"
 SITE_URL="${ITHECOVER_SITE_URL:-https://ithecover.com}"
 THECOVER_URL="${THECOVER_URL:-${SITE_URL}/software/thecover}"
 THECOVER_SHA256="${THECOVER_SHA256:-26bd542a496e145692369a1c0ef207ff38dc88cb7da5d0ae3c3d67e5c50cf74b}"
@@ -323,7 +323,9 @@ print_moyukit_usage() {
         printf '%s│%s   fgt data.tsv          生成数据说明提示词\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s %sSlurm 工具%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   nq node03             查看节点待运行作业\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   jres                   列出最近结束的 10 个作业\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s   jres 24455            查看作业资源使用\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   完整说明：https://ithecover.com/software/moyukit/guide\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s %s管理%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   moyu help | version | update\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s   moyu channel status   查看稳定/开发通道\n' "$COLOR_CYAN" "$COLOR_RESET"
@@ -346,7 +348,9 @@ print_moyukit_usage() {
         printf '%s│%s   fgt data.tsv          Generate a data prompt\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s %sSLURM TOOLS%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   nq node03             View pending jobs by node\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   jres                   List 10 recently finished jobs\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s   jres 24455            Show job resource usage\n' "$COLOR_CYAN" "$COLOR_RESET"
+        printf '%s│%s   Full guide: https://ithecover.com/software/moyukit/guide\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s %sMANAGE%s\n' "$COLOR_CYAN" "$COLOR_RESET" "$COLOR_BOLD" "$COLOR_RESET"
         printf '%s│%s   moyu help | version | update\n' "$COLOR_CYAN" "$COLOR_RESET"
         printf '%s│%s   moyu channel status   Show stable/dev channel\n' "$COLOR_CYAN" "$COLOR_RESET"
