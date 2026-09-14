@@ -114,11 +114,6 @@ const nextConfig = {
             destination: '/software/install.sh',
             permanent: false
           },
-          {
-            source: '/software/moyukit/guide',
-            destination: '/software/moyukit/guide.html',
-            permanent: false
-          },
           ...Object.entries(SOFTWARE_DOWNLOADS).map(
             ([software, destination]) => ({
               source: `/software/${software}`,
